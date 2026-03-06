@@ -56,9 +56,16 @@ public class PortalUserService {
         return portalUserMapper.toDTO(user);
     }
 
-    /**
-     * Elimina un utente tramite ID.
-     */
+    public PortalUserDTO update(Integer id, @Valid PortalUserDTO userDTO) {
+        portalUserRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("PortalUser not found with id: " + id));
+        userDTO.setPassword(passwordHasher.toMD5(userDTO.getPassword()));
+        PortalUser user = portalUserMapper.toEntity(userDTO);
+        user.setId(id);
+        user = portalUserRepository.save(user);
+        return portalUserMapper.toDTO(user);
+    }
+
     public void deleteById(Integer id) {
         portalUserRepository.deleteById(id);
     }

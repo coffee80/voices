@@ -1,5 +1,7 @@
 package com.generation.voices.service;
 
+import com.generation.voices.dto.BlogDTO;
+import com.generation.voices.mapper.BlogMapper;
 import com.generation.voices.model.Blog;
 import com.generation.voices.repository.BlogRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -16,31 +18,35 @@ public class BlogService {
     @Autowired
     private BlogRepository blogRepository;
 
-    /**
-     * Ritorna la lista di tutti i blog.
-     */
-    public List<Blog> findAll() {
-        return blogRepository.findAll();
+    @Autowired
+    private BlogMapper blogMapper;
+
+    public List<BlogDTO> findAll() {
+        return blogMapper.toDTOs(blogRepository.findAll());
     }
 
-    /**
-     * Cerca un blog tramite ID. Lancia un'eccezione se non trovato.
-     */
-    public Blog findById(Integer id) {
-        return blogRepository.findById(id)
+    public BlogDTO findById(Integer id) {
+        Blog blog = blogRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Blog not found with id: " + id));
+        return blogMapper.toDTO(blog);
     }
 
-    /**
-     * Salva un nuovo blog o aggiorna uno esistente.
-     */
-    public Blog save(@Valid Blog blog) {
-        return blogRepository.save(blog);
+    public BlogDTO save(@Valid BlogDTO blogDTO) {
+        Blog blog = blogMapper.toEntity(blogDTO);
+        blog = blogRepository.save(blog);
+        return blogMapper.toDTO(blog);
     }
 
-    /**
-     * Elimina un blog tramite ID.
-     */
+    public BlogDTO update(Integer id, @Valid BlogDTO blogDTO) {
+        // Verifica che il blog esista prima di aggiornare
+        blogRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Blog not found with id: " + id));
+        Blog blog = blogMapper.toEntity(blogDTO);
+        blog.setId(id);
+        blog = blogRepository.save(blog);
+        return blogMapper.toDTO(blog);
+    }
+
     public void deleteById(Integer id) {
         blogRepository.deleteById(id);
     }

@@ -1,0 +1,56 @@
+PUNTO SESSIONE 2 - SVILUPPO BACKEND
+Data: 06/03/2026
+Aggiornato alle: 16:34
+============================================================
+
+1. COMPLETAMENTO LAYER SERVICE
+
+   BlogService - aggiornato per usare DTO e mapper
+   - findAll()            → List<BlogDTO>
+   - findById(id)         → BlogDTO
+   - save(BlogDTO)        → BlogDTO
+   - update(id, BlogDTO)  → BlogDTO
+   - deleteById(id)       → void
+
+   BlogPostService - creato da zero
+   - findAll()                  → List<BlogPostDTO>
+   - findById(id)               → BlogPostDTO
+   - findByBlogId(blogId)       → List<BlogPostDTO>
+   - save(BlogPostDTO)          → BlogPostDTO
+   - update(id, BlogPostDTO)    → BlogPostDTO
+   - deleteById(id)             → void
+
+   PortalUserService - aggiunto metodo update
+   - update(id, PortalUserDTO)  → PortalUserDTO
+
+2. NUOVI CONTROLLER REST (CRUD COMPLETO)
+
+   BlogAPI          → /voices/api/blogs
+   BlogPostAPI      → /voices/api/posts
+                       + GET /voices/api/posts/blog/{blogId}
+
+   PortalUserAPI    → completato con GET, PUT, DELETE
+                       (prima aveva solo POST)
+
+3. REFACTOR PACKAGE ENUM
+   - Spostati Role, BlogType, BlogPostStatus, Palette
+     in model/enumerations/
+   - Corretti package declaration e import in tutti i file
+
+4. TEST SU POSTMAN
+   - Tutte le API testate e funzionanti su porta 8080
+   - Fix errore Content-Type (text/plain → application/json)
+
+============================================================
+MESSAGGIO DI COMMIT
+   feat: aggiunto CRUD completo per Blog, BlogPost e PortalUser,
+   aggiunti BlogPostService, BlogAPI, BlogPostAPI,
+   refactor enum in model/enumerations
+
+============================================================
+TODO PROSSIMA SESSIONE
+   - Aggiungere entità Comment (dal diagramma UML)
+   - Aggiungere entità Template (dal diagramma UML)
+   - Valutare se trasformare Palette da enum a entità (UML: M:M con Blog)
+   - Implementare cascade delete Blog → BlogPost → Comment
+============================================================
